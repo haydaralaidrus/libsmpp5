@@ -8,4 +8,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Unreleased
 
 ### Added
-- `pdu.h/pdu.c`: Encoding/decoding PDUs.
+- `pdu.h`/`pdu.c`: Encoding/decoding PDUs.
+- `smpp.h`/`smpp.c`: SMPP functionality.
