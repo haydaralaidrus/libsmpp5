@@ -2,9 +2,11 @@
 
 #include <string.h>
 
+/** reads 4 bytes at p as a big-endian uint32_t */
 static uint32_t
 read_u32be(const uint8_t *p);
 
+/** writes into p as 4 big-endian bytes */
 static void
 write_u32be(uint8_t *p, uint32_t value);
 
