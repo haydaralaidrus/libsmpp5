@@ -272,9 +272,11 @@ typedef struct smpp_bind_t {
 
 smpp_status_t
 smpp_bind_decode(const uint8_t *body, size_t body_length, smpp_bind_t *bind);
+
 smpp_status_t
 smpp_bind_encode(const smpp_bind_t *bind, uint8_t *buffer,
 				 size_t buffer_length);
+
 size_t
 smpp_bind_encoded_length(const smpp_bind_t *bind);
 
@@ -287,9 +289,11 @@ typedef struct smpp_bind_resp_t {
 smpp_status_t
 smpp_bind_resp_decode(const uint8_t *body, size_t body_length,
 					  smpp_bind_resp_t *resp);
+
 smpp_status_t
 smpp_bind_resp_encode(const smpp_bind_resp_t *resp, uint8_t *buffer,
 					  size_t buffer_length);
+
 size_t
 smpp_bind_resp_encoded_length(const smpp_bind_resp_t *resp);
 
@@ -318,8 +322,10 @@ typedef struct smpp_sm_t {
 
 smpp_status_t
 smpp_sm_decode(const uint8_t *body, size_t body_length, smpp_sm_t *sm);
+
 smpp_status_t
 smpp_sm_encode(const smpp_sm_t *sm, uint8_t *buffer, size_t buffer_length);
+
 size_t
 smpp_sm_encoded_length(const smpp_sm_t *sm);
 
@@ -332,9 +338,11 @@ typedef struct smpp_sm_resp_t {
 smpp_status_t
 smpp_sm_resp_decode(const uint8_t *body, size_t body_length,
 					smpp_sm_resp_t *resp);
+
 smpp_status_t
 smpp_sm_resp_encode(const smpp_sm_resp_t *resp, uint8_t *buffer,
 					size_t buffer_length);
+
 size_t
 smpp_sm_resp_encoded_length(const smpp_sm_resp_t *resp);
 
