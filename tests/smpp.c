@@ -19,9 +19,9 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "pdu.h"
-#include "smpp.h"
-#include "smpp_tlv.h"
+#include "libsmpp5/pdu.h"
+#include "libsmpp5/smpp.h"
+#include "libsmpp5/smpp_tlv.h"
 #include "tests.h"
 
 static int

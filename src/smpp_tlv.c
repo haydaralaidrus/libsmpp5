@@ -18,7 +18,7 @@
 
 #include <string.h>
 
-#include "smpp_tlv.h"
+#include "libsmpp5/smpp_tlv.h"
 
 smpp_tlv_status_t
 smpp_tlv_next(const uint8_t **cursor, const uint8_t *end, smpp_tlv_t *tlv)

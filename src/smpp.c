@@ -18,7 +18,7 @@
 
 #include <string.h>
 
-#include "smpp.h"
+#include "libsmpp5/smpp.h"
 
 typedef struct writer_t {
 	uint8_t *buf;

@@ -19,7 +19,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "pdu.h"
+#include "libsmpp5/pdu.h"
 #include "tests.h"
 
 static int

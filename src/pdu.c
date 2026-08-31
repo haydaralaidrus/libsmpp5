@@ -18,7 +18,7 @@
 
 #include <string.h>
 
-#include "pdu.h"
+#include "libsmpp5/pdu.h"
 
 /** reads 4 bytes at p as a big-endian uint32_t */
 static uint32_t
