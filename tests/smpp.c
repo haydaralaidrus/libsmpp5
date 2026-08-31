@@ -3,6 +3,7 @@
 
 #include "pdu.h"
 #include "smpp.h"
+#include "smpp_tlv.h"
 #include "tests.h"
 
 static int
@@ -57,7 +58,7 @@ test_bind_resp_round_trip_with_tlv(void)
 	uint8_t version_value = SMPP_INTERFACE_VERSION_5_0;
 	CHECK(smpp_tlv_write(tlv_blob, sizeof(tlv_blob), &tlv_offset,
 						 SMPP_TAG_SC_INTERFACE_VERSION, &version_value,
-						 1) == SMPP_OK);
+						 1) == SMPP_TLV_OK);
 
 	uint8_t wire[64];
 	smpp_bind_resp_t in = { 0 };
@@ -131,7 +132,7 @@ test_submit_sm_with_absolute_time_and_tlv(void)
 	uint8_t ref_be[2] = { (uint8_t)(ref >> 8), (uint8_t)ref };
 	CHECK(smpp_tlv_write(tlv_blob, sizeof(tlv_blob), &off,
 						 SMPP_TAG_USER_MESSAGE_REFERENCE, ref_be,
-						 2) == SMPP_OK);
+						 2) == SMPP_TLV_OK);
 
 	uint8_t wire[256];
 	smpp_sm_t in = { 0 };
@@ -218,8 +219,10 @@ test_tlv_iteration(void)
 	size_t off = 0;
 	const uint8_t v1[] = { 0xAA };
 	const uint8_t v2[] = { 0xBB, 0xCC };
-	CHECK(smpp_tlv_write(blob, sizeof(blob), &off, 0x0001, v1, 1) == SMPP_OK);
-	CHECK(smpp_tlv_write(blob, sizeof(blob), &off, 0x0002, v2, 2) == SMPP_OK);
+	CHECK(smpp_tlv_write(blob, sizeof(blob), &off, 0x0001, v1, 1) ==
+		  SMPP_TLV_OK);
+	CHECK(smpp_tlv_write(blob, sizeof(blob), &off, 0x0002, v2, 2) ==
+		  SMPP_TLV_OK);
 
 	const uint8_t *cursor = blob;
 	const uint8_t *end = blob + off;
