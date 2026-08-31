@@ -22,6 +22,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define PDU_HEADER_LENGTH 16u
 
 /**
@@ -84,5 +88,9 @@ pdu_encode(const pdu_t *pdu, uint8_t *buffer, size_t buffer_length);
  */
 size_t
 pdu_encoded_length(const pdu_t *pdu);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

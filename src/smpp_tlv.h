@@ -22,6 +22,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+/** TLV tags */
 #define SMPP_TAG_DEST_ADDR_SUBUNIT 0x0005u
 #define SMPP_TAG_DEST_NETWORK_TYPE 0x0006u
 #define SMPP_TAG_DEST_BEARER_TYPE 0x0007u
@@ -87,12 +92,21 @@
 #define SMPP_TAG_ITS_REPLY_TYPE 0x1380u
 #define SMPP_TAG_ITS_SESSION_INFO 0x1383u
 
+/**
+ * \struct smpp_tlv_t
+ * \brief A decoded tag-length-value entry.
+ */
 typedef struct smpp_tlv_t {
-	uint16_t tag;
-	uint16_t length;
-	const uint8_t *value;
+	uint16_t tag; /** Identifies the TLV; one of the SMPP_TAG_* values. */
+	uint16_t length; /** Length of value in octets. */
+	const uint8_t *value; /** TLV value, or NULL when length is 0. */
 } smpp_tlv_t;
 
+/**
+ * \enum smpp_tlv_status_t
+ * \brief Result of TLV decode/encode step. SMPP_TLV_END marks an end
+ *        of iteration.
+ */
 typedef enum smpp_tlv_status_t {
 	SMPP_TLV_OK = 0,
 	SMPP_TLV_END,
@@ -100,15 +114,44 @@ typedef enum smpp_tlv_status_t {
 	SMPP_TLV_ERR_BUFFER_TOO_SMALL
 } smpp_tlv_status_t;
 
+/**
+ * \brief Decodes next TLV and advances the cursor.
+ * \param cursor Cursor into the TLV stream, advanced past the decoded TLV.
+ * \param end End of the TLV stream.
+ * \param tlv Out param.
+ * \return SMPP_TLV_OK, SMPP_TLV_END, or SMPP_TLV_MALFORMED.
+ */
 smpp_tlv_status_t
 smpp_tlv_next(const uint8_t **cursor, const uint8_t *end, smpp_tlv_t *tlv);
 
+/**
+ * \brief Finds a TLV by tag.
+ * \param tlvs TLV stream.
+ * \param tlvs_length Octets in tlvs.
+ * \param tag Tag to find.
+ * \param tlv Out param.
+ * \return 1 if found, 0 if not found or the stream is malformed.
+ */
 int
 smpp_tlv_find(const uint8_t *tlvs, uint16_t tlvs_length, uint16_t tag,
 			  smpp_tlv_t *tlv);
 
+/**
+ * \brief Encodes one TLV and advances the offset.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \param offset Current write position; advanced past the written TLV.
+ * \param tag Tag to write.
+ * \param value Value octets.
+ * \param value_length Octets in value.
+ * \return SMPP_TLV_OK on success.
+ */
 smpp_tlv_status_t
 smpp_tlv_write(uint8_t *buffer, size_t buffer_length, size_t *offset,
 			   uint16_t tag, const uint8_t *value, uint16_t value_length);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

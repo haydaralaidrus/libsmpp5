@@ -22,6 +22,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** SMPP requests */
 #define SMPP_CMD_BIND_RECEIVER (0x00000001u)
 #define SMPP_CMD_BIND_TRANSMITTER (0x00000002u)
@@ -383,5 +387,9 @@ smpp_sm_resp_encode(const smpp_sm_resp_t *resp, uint8_t *buffer,
  */
 size_t
 smpp_sm_resp_encoded_length(const smpp_sm_resp_t *resp);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
