@@ -1,6 +1,6 @@
-#include "smpp.h"
-
 #include <string.h>
+
+#include "smpp.h"
 
 typedef struct writer_t {
 	uint8_t *buf;
