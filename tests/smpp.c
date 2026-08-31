@@ -298,6 +298,30 @@ test_full_pipeline_through_pdu_layer(void)
 	return 0;
 }
 
+static int
+test_strerror(void)
+{
+	CHECK(strcmp(smpp_strerror(SMPP_OK), "success") == 0);
+	CHECK(strlen(smpp_strerror(SMPP_ERR_INVALID)) > 0);
+	CHECK(strlen(smpp_strerror(SMPP_ERR_BUFFER_TOO_SMALL)) > 0);
+	CHECK(smpp_strerror((smpp_status_t)999) != NULL);
+
+	CHECK(strcmp(smpp_tlv_strerror(SMPP_TLV_OK), "success") == 0);
+	CHECK(strlen(smpp_tlv_strerror(SMPP_TLV_END)) > 0);
+	CHECK(strlen(smpp_tlv_strerror(SMPP_TLV_MALFORMED)) > 0);
+	CHECK(strlen(smpp_tlv_strerror(SMPP_TLV_ERR_BUFFER_TOO_SMALL)) > 0);
+	CHECK(smpp_tlv_strerror((smpp_tlv_status_t)999) != NULL);
+
+	CHECK(strcmp(smpp_esme_strerror(SMPP_ESME_ROK), "success") == 0);
+	CHECK(strlen(smpp_esme_strerror(SMPP_ESME_RINVMSGLEN)) > 0);
+	CHECK(strlen(smpp_esme_strerror(SMPP_ESME_RBINDFAIL)) > 0);
+	CHECK(strlen(smpp_esme_strerror(SMPP_ESME_RINVBCASTCHANIND)) > 0);
+
+	CHECK(smpp_esme_strerror(0x00000012u) != NULL);
+	CHECK(smpp_esme_strerror(0x00000450u) != NULL);
+	return 0;
+}
+
 int
 main(void)
 {
@@ -313,6 +337,7 @@ main(void)
 	failures += test_decode_validation_errors();
 	failures += test_tlv_iteration();
 	failures += test_full_pipeline_through_pdu_layer();
+	failures += test_strerror();
 
 	if (failures > 0) {
 		fprintf(stderr, "%d check(s) failed\n", failures);

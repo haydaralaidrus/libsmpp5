@@ -76,6 +76,24 @@ pdu_encoded_length(const pdu_t *pdu)
 	return (size_t)PDU_HEADER_LENGTH + pdu->body_length;
 }
 
+const char *
+pdu_strerror(pdu_status_t status)
+{
+	/* No default */
+	switch (status) {
+	case PDU_OK:
+		return "success";
+	case PDU_ERR_INCOMPLETE:
+		return "incomplete PDU";
+	case PDU_ERR_INVALID_LENGTH:
+		return "command_length smaller than the 16-octet header";
+	case PDU_ERR_BUFFER_TOO_SMALL:
+		return "destination buffer too small";
+	}
+
+	return "unknown pdu_status_t";
+}
+
 static uint32_t
 read_u32be(const uint8_t *p)
 {

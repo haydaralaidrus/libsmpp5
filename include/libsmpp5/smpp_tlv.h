@@ -150,6 +150,14 @@ smpp_tlv_status_t
 smpp_tlv_write(uint8_t *buffer, size_t buffer_length, size_t *offset,
 			   uint16_t tag, const uint8_t *value, uint16_t value_length);
 
+/**
+ * \brief Returns a string describing status.
+ * \param status The status.
+ * \return A string literal.
+ */
+const char *
+smpp_tlv_strerror(smpp_tlv_status_t status);
+
 #ifdef __cplusplus
 }
 #endif

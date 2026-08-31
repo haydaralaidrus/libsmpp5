@@ -89,3 +89,21 @@ smpp_tlv_write(uint8_t *buffer, size_t buffer_length, size_t *offset,
 	*offset += needed;
 	return SMPP_TLV_OK;
 }
+
+const char *
+smpp_tlv_strerror(smpp_tlv_status_t status)
+{
+	/* No default */
+	switch (status) {
+	case SMPP_TLV_OK:
+		return "success";
+	case SMPP_TLV_END:
+		return "end of TLV stream";
+	case SMPP_TLV_MALFORMED:
+		return "malformed TLV stream";
+	case SMPP_TLV_ERR_BUFFER_TOO_SMALL:
+		return "destination buffer too small";
+	}
+
+	return "unknown smpp_tlv_status_t";
+}

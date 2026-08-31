@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Error to string functions: `pdu_strerror`, `smpp_strerror`, `smpp_tlv_strerror`, & `smpp_esme_strerror`
 - GNU LGPL license.
 - Supports `install()` with standard paths, CMake package export, pkg-config support,
   & versioned shared libraries.

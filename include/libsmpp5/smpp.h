@@ -388,6 +388,22 @@ smpp_sm_resp_encode(const smpp_sm_resp_t *resp, uint8_t *buffer,
 size_t
 smpp_sm_resp_encoded_length(const smpp_sm_resp_t *resp);
 
+/**
+ * \brief Returns a string describing status.
+ * \param status The status.
+ * \return A string literal.
+ */
+const char *
+smpp_strerror(smpp_status_t status);
+
+/**
+ * \brief Returns a string describing command_status value.
+ * \param command_status The command_status value from a PDU header.
+ * \return A string literal.
+ */
+const char *
+smpp_esme_strerror(uint32_t command_status);
+
 #ifdef __cplusplus
 }
 #endif

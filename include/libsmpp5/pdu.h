@@ -89,6 +89,14 @@ pdu_encode(const pdu_t *pdu, uint8_t *buffer, size_t buffer_length);
 size_t
 pdu_encoded_length(const pdu_t *pdu);
 
+/**
+ * \brief Returns a string describing status.
+ * \param status The status.
+ * \return A string literal.
+ */
+const char *
+pdu_strerror(pdu_status_t status);
+
 #ifdef __cplusplus
 }
 #endif

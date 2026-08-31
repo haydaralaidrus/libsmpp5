@@ -139,6 +139,19 @@ test_two_pdus_back_to_back(void)
 	return 0;
 }
 
+static int
+test_strerror(void)
+{
+	CHECK(strcmp(pdu_strerror(PDU_OK), "success") == 0);
+	CHECK(strlen(pdu_strerror(PDU_ERR_INCOMPLETE)) > 0);
+	CHECK(strlen(pdu_strerror(PDU_ERR_INVALID_LENGTH)) > 0);
+	CHECK(strlen(pdu_strerror(PDU_ERR_BUFFER_TOO_SMALL)) > 0);
+
+	/* Out-of-range */
+	CHECK(pdu_strerror((pdu_status_t)999) != NULL);
+	return 0;
+}
+
 int
 main(void)
 {
@@ -151,6 +164,7 @@ main(void)
 	failures += test_invalid_length();
 	failures += test_buffer_too_small_on_encode();
 	failures += test_two_pdus_back_to_back();
+	failures += test_strerror();
 
 	if (failures > 0) {
 		fprintf(stderr, "%d check(s) failed\n", failures);
