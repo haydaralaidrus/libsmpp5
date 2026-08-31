@@ -68,12 +68,17 @@ pdu_decode(const uint8_t *buffer, size_t buffer_length, pdu_t *pdu);
 
 /**
  * \brief Encode pdu into buffer, deriving command_length from body_length.
+ * \param pdu PDU to be encoded.
  * \param buffer Destination.
+ * \param buffer_length
  */
 pdu_status_t
 pdu_encode(const pdu_t *pdu, uint8_t *buffer, size_t buffer_length);
 
-/** \brief Octets needed to write pdu. */
+/**
+ * \brief Octets needed to write pdu.
+ * \param pdu The PDU.
+ */
 size_t
 pdu_encoded_length(const pdu_t *pdu);
 
