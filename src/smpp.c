@@ -34,39 +34,39 @@ typedef struct reader_t {
 	smpp_status_t error;
 } reader_t;
 
-/* Return string length, or 0 if s is NULL */
+/* Returns string length, or 0 if s is NULL */
 static size_t
 safe_strlen(const char *s);
 
-/* Write one byte to the buffer */
+/* Writes one byte to the buffer */
 static void
 w_u8(writer_t *w, uint8_t v);
 
-/* Write n raw bytes to the buffer */
+/* Writes n raw bytes to the buffer */
 static void
 w_bytes(writer_t *w, const uint8_t *data, size_t n);
 
-/* Write a null-terminated string, capped at max_len */
+/* Writes a null-terminated string, capped at max_len */
 static void
 w_cstring(writer_t *w, const char *s, size_t max_len);
 
-/* Write an SMPP time string (must be empty or 16 chars) */
+/* Writes an SMPP time string (must be empty or 16 chars) */
 static void
 w_time_cstring(writer_t *w, const char *s);
 
-/* Read one byte from the buffer */
+/* Reads one byte from the buffer */
 static uint8_t
 r_u8(reader_t *r);
 
-/* Read n raw bytes and return a pointer to them */
+/* Reads n raw bytes and return a pointer to them */
 static const uint8_t *
 r_octets(reader_t *r, size_t n);
 
-/* Read a null-terminated string, up to max_len bytes */
+/* Reads a null-terminated string, up to max_len bytes */
 static const char *
 r_cstring(reader_t *r, size_t max_len);
 
-/* Read the remaining bytes as TLV data */
+/* Reads the remaining bytes as TLV data */
 static void
 r_tlvs(reader_t *r, const uint8_t **tlvs, uint16_t *tlvs_length);
 

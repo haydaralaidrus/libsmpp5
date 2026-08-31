@@ -58,26 +58,29 @@ typedef struct pdu_t {
 } pdu_t;
 
 /**
- * \brief Decode a single PDU from the front of buffer.
+ * \brief Decodes a single PDU from the front of buffer.
  * \param buffer Octets received so far.
  * \param buffer_length Octets available in buffer.
  * \param pdu Out param.
+ * \return status of PDU operation.
  */
 pdu_status_t
 pdu_decode(const uint8_t *buffer, size_t buffer_length, pdu_t *pdu);
 
 /**
- * \brief Encode pdu into buffer, deriving command_length from body_length.
+ * \brief Encodes pdu into buffer, deriving command_length from body_length.
  * \param pdu PDU to be encoded.
  * \param buffer Destination.
  * \param buffer_length
+ * \return status of PDU operation.
  */
 pdu_status_t
 pdu_encode(const pdu_t *pdu, uint8_t *buffer, size_t buffer_length);
 
 /**
- * \brief Octets needed to write pdu.
+ * \brief Returns octets needed to write pdu.
  * \param pdu The PDU.
+ * \return The octets needed to write the pdu.
  */
 size_t
 pdu_encoded_length(const pdu_t *pdu);

@@ -163,6 +163,7 @@
 #define SMPP_DATA_CODING_LATIN_HEBREW (0x07u)
 #define SMPP_DATA_CODING_UCS2 (0x08u)
 
+/** ESM class */
 #define SMPP_ESM_CLASS_DEFAULT (0x00u)
 #define SMPP_ESM_CLASS_DATAGRAM (0x01u)
 #define SMPP_ESM_CLASS_FORWARD (0x02u)
@@ -172,6 +173,7 @@
 #define SMPP_ESM_CLASS_UDHI (0x40u)
 #define SMPP_ESM_CLASS_REPLY_PATH (0x80u)
 
+/** Registered delivery */
 #define SMPP_REGISTERED_DELIVERY_NONE (0x00u)
 #define SMPP_REGISTERED_DELIVERY_SUCCESS_OR_FAILURE (0x01u)
 #define SMPP_REGISTERED_DELIVERY_FAILURE (0x02u)
@@ -180,9 +182,11 @@
 #define SMPP_REGISTERED_DELIVERY_SME_USER_ACK (0x08u)
 #define SMPP_REGISTERED_DELIVERY_INTERMEDIATE_NOTIFICATION (0x10u)
 
+/** Replace if present flag */
 #define SMPP_REPLACE_IF_PRESENT_NO (0x00u)
 #define SMPP_REPLACE_IF_PRESENT_YES (0x01u)
 
+/** Field length limits */
 #define SMPP_SYSTEM_ID_MAX (16u)
 #define SMPP_PASSWORD_MAX (9u)
 #define SMPP_SYSTEM_TYPE_MAX (13u)
@@ -192,12 +196,20 @@
 #define SMPP_TIME_MAX (17u)
 #define SMPP_MESSAGE_ID_MAX (65u)
 
+/**
+ * \enum smpp_status_t
+ * \brief Result of an SMPP operation.
+ */
 typedef enum smpp_status_t {
 	SMPP_OK = 0,
 	SMPP_ERR_INVALID,
 	SMPP_ERR_BUFFER_TOO_SMALL,
 } smpp_status_t;
 
+/**
+ * \struct smpp_bind_t
+ * \brief bind_transmitter, bind_receiver, & bind_transceiver.
+ */
 typedef struct smpp_bind_t {
 	const char *system_id;
 	const char *password;
@@ -208,33 +220,79 @@ typedef struct smpp_bind_t {
 	const char *address_range;
 } smpp_bind_t;
 
+/**
+ * \brief Decodes bind requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param bind Out param.
+ * \return SMPP_OK on success.
+ */
 smpp_status_t
 smpp_bind_decode(const uint8_t *body, size_t body_length, smpp_bind_t *bind);
 
+/**
+ * \brief Encodes bind requests.
+ * \param bind Bind to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
 smpp_status_t
 smpp_bind_encode(const smpp_bind_t *bind, uint8_t *buffer,
 				 size_t buffer_length);
 
+/**
+ * \brief Octets needed to encode bind.
+ * \param bind The bind.
+ * \return Octets needed.
+ */
 size_t
 smpp_bind_encoded_length(const smpp_bind_t *bind);
 
+/**
+ * \struct smpp_bind_resp_t
+ * \brief bind_transmitter_resp, bind_receiver_resp, & bind_transceiver_resp.
+ */
 typedef struct smpp_bind_resp_t {
 	const char *system_id;
 	const uint8_t *tlvs;
 	uint16_t tlvs_length;
 } smpp_bind_resp_t;
 
+/**
+ * \brief Decodes bind_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
 smpp_status_t
 smpp_bind_resp_decode(const uint8_t *body, size_t body_length,
 					  smpp_bind_resp_t *resp);
 
+/**
+ * \brief Encodes bind_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
 smpp_status_t
 smpp_bind_resp_encode(const smpp_bind_resp_t *resp, uint8_t *buffer,
 					  size_t buffer_length);
 
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
 size_t
 smpp_bind_resp_encoded_length(const smpp_bind_resp_t *resp);
 
+/**
+ * \struct smpp_sm_t
+ * \brief submit_sm & deliver_sm.
+ */
 typedef struct smpp_sm_t {
 	const char *service_type;
 	uint8_t source_addr_ton;
@@ -258,29 +316,71 @@ typedef struct smpp_sm_t {
 	uint16_t tlvs_length;
 } smpp_sm_t;
 
+/**
+ * \brief Decodes sm requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param sm Out param.
+ * \return SMPP_OK on success.
+ */
 smpp_status_t
 smpp_sm_decode(const uint8_t *body, size_t body_length, smpp_sm_t *sm);
 
+/**
+ * \brief Encodes sm requests.
+ * \param sm Message to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
 smpp_status_t
 smpp_sm_encode(const smpp_sm_t *sm, uint8_t *buffer, size_t buffer_length);
 
+/**
+ * \brief Octets needed to encode sm.
+ * \param sm The message.
+ * \return Octets needed.
+ */
 size_t
 smpp_sm_encoded_length(const smpp_sm_t *sm);
 
+/**
+ * \struct smpp_sm_resp_t
+ * \brief submit_sm_resp & deliver_sm_resp.
+ */
 typedef struct smpp_sm_resp_t {
 	const char *message_id;
 	const uint8_t *tlvs;
 	uint16_t tlvs_length;
 } smpp_sm_resp_t;
 
+/**
+ * \brief Decodes sm_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
 smpp_status_t
 smpp_sm_resp_decode(const uint8_t *body, size_t body_length,
 					smpp_sm_resp_t *resp);
 
+/**
+ * \brief Encodes sm_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
 smpp_status_t
 smpp_sm_resp_encode(const smpp_sm_resp_t *resp, uint8_t *buffer,
 					size_t buffer_length);
 
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
 size_t
 smpp_sm_resp_encoded_length(const smpp_sm_resp_t *resp);
 
