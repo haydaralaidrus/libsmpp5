@@ -41,6 +41,24 @@ smpp_priv_w_u8(writer_t *w, uint8_t v)
 }
 
 void
+smpp_priv_w_u32(writer_t *w, uint32_t v)
+{
+	if (w->error)
+		return;
+
+	if (w->pos + 4 > w->len) {
+		w->error = SMPP_ERR_BUFFER_TOO_SMALL;
+		return;
+	}
+
+	w->buf[w->pos] = (uint8_t)(v >> 24);
+	w->buf[w->pos + 1] = (uint8_t)(v >> 16);
+	w->buf[w->pos + 2] = (uint8_t)(v >> 8);
+	w->buf[w->pos + 3] = (uint8_t)v;
+	w->pos += 4;
+}
+
+void
 smpp_priv_w_bytes(writer_t *w, const uint8_t *data, size_t n)
 {
 	if (w->error || n == 0)
@@ -106,6 +124,25 @@ smpp_priv_r_u8(reader_t *r)
 	}
 
 	return r->buf[r->pos++];
+}
+
+uint32_t
+smpp_priv_r_u32(reader_t *r)
+{
+	if (r->error)
+		return 0;
+
+	if (r->pos + 4 > r->len) {
+		r->error = SMPP_ERR_INVALID;
+		return 0;
+	}
+
+	uint32_t v = ((uint32_t)r->buf[r->pos] << 24) |
+				 ((uint32_t)r->buf[r->pos + 1] << 16) |
+				 ((uint32_t)r->buf[r->pos + 2] << 8) |
+				 (uint32_t)r->buf[r->pos + 3];
+	r->pos += 4;
+	return v;
 }
 
 const uint8_t *

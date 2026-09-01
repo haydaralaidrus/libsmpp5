@@ -43,6 +43,10 @@ smpp_priv_safe_strlen(const char *s);
 void
 smpp_priv_w_u8(writer_t *w, uint8_t v);
 
+/* Writes v as 4 big-endian bytes */
+void
+smpp_priv_w_u32(writer_t *w, uint32_t v);
+
 /* Writes n raw bytes to the buffer */
 void
 smpp_priv_w_bytes(writer_t *w, const uint8_t *data, size_t n);
@@ -58,6 +62,10 @@ smpp_priv_w_time_cstring(writer_t *w, const char *s);
 /* Reads one byte from the buffer */
 uint8_t
 smpp_priv_r_u8(reader_t *r);
+
+/* Reads 4 bytes as a big-endian uint32_t */
+uint32_t
+smpp_priv_r_u32(reader_t *r);
 
 /* Reads n raw bytes and return a pointer to them */
 const uint8_t *

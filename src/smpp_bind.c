@@ -89,3 +89,34 @@ smpp_bind_resp_encoded_length(const smpp_bind_resp_t *resp)
 {
 	return smpp_priv_safe_strlen(resp->system_id) + 1 + resp->tlvs_length;
 }
+
+smpp_status_t
+smpp_outbind_decode(const uint8_t *body, size_t body_length,
+					smpp_outbind_t *outbind)
+{
+	reader_t r = { body, body_length, 0, SMPP_OK };
+
+	outbind->system_id = smpp_priv_r_cstring(&r, SMPP_SYSTEM_ID_MAX);
+	outbind->password = smpp_priv_r_cstring(&r, SMPP_PASSWORD_MAX);
+
+	return r.error;
+}
+
+smpp_status_t
+smpp_outbind_encode(const smpp_outbind_t *outbind, uint8_t *buffer,
+					size_t buffer_length)
+{
+	writer_t w = { buffer, buffer_length, 0, SMPP_OK };
+
+	smpp_priv_w_cstring(&w, outbind->system_id, SMPP_SYSTEM_ID_MAX);
+	smpp_priv_w_cstring(&w, outbind->password, SMPP_PASSWORD_MAX);
+
+	return w.error;
+}
+
+size_t
+smpp_outbind_encoded_length(const smpp_outbind_t *outbind)
+{
+	return smpp_priv_safe_strlen(outbind->system_id) + 1 +
+		   smpp_priv_safe_strlen(outbind->password) + 1;
+}

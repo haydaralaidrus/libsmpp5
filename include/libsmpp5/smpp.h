@@ -195,6 +195,22 @@ extern "C" {
 #define SMPP_REPLACE_IF_PRESENT_NO (0x00u)
 #define SMPP_REPLACE_IF_PRESENT_YES (0x01u)
 
+/** dest_flag (submit_multi destination discriminator) */
+#define SMPP_DEST_FLAG_SME_ADDRESS (0x01u)
+#define SMPP_DEST_FLAG_DISTRIBUTION_LIST (0x02u)
+
+/** message_state (query_sm_resp, and via TLV, query_broadcast_sm_resp) */
+#define SMPP_MESSAGE_STATE_SCHEDULED (0x00u)
+#define SMPP_MESSAGE_STATE_ENROUTE (0x01u)
+#define SMPP_MESSAGE_STATE_DELIVERED (0x02u)
+#define SMPP_MESSAGE_STATE_EXPIRED (0x03u)
+#define SMPP_MESSAGE_STATE_DELETED (0x04u)
+#define SMPP_MESSAGE_STATE_UNDELIVERABLE (0x05u)
+#define SMPP_MESSAGE_STATE_ACCEPTED (0x06u)
+#define SMPP_MESSAGE_STATE_UNKNOWN (0x07u)
+#define SMPP_MESSAGE_STATE_REJECTED (0x08u)
+#define SMPP_MESSAGE_STATE_SKIPPED (0x09u)
+
 /** Field length limits */
 #define SMPP_SYSTEM_ID_MAX (16u)
 #define SMPP_PASSWORD_MAX (9u)
@@ -202,6 +218,8 @@ extern "C" {
 #define SMPP_ADDRESS_RANGE_MAX (41u)
 #define SMPP_SERVICE_TYPE_MAX (6u)
 #define SMPP_ADDR_MAX (21u)
+#define SMPP_LONG_ADDR_MAX (65u)
+#define SMPP_DL_NAME_MAX (21u)
 #define SMPP_TIME_MAX (17u)
 #define SMPP_MESSAGE_ID_MAX (65u)
 
@@ -299,6 +317,45 @@ size_t
 smpp_bind_resp_encoded_length(const smpp_bind_resp_t *resp);
 
 /**
+ * \struct smpp_outbind_t
+ * \brief outbind. MC-originated invitation for ESME to bind.
+ */
+typedef struct smpp_outbind_t {
+	const char *system_id;
+	const char *password;
+} smpp_outbind_t;
+
+/**
+ * \brief Decodes outbind requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param outbind Out param.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_outbind_decode(const uint8_t *body, size_t body_length,
+					smpp_outbind_t *outbind);
+
+/**
+ * \brief Encodes outbind requests.
+ * \param outbind Outbind to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_outbind_encode(const smpp_outbind_t *outbind, uint8_t *buffer,
+					size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode outbind.
+ * \param outbind The outbind.
+ * \return Octets needed.
+ */
+size_t
+smpp_outbind_encoded_length(const smpp_outbind_t *outbind);
+
+/**
  * \struct smpp_sm_t
  * \brief submit_sm & deliver_sm.
  */
@@ -355,7 +412,8 @@ smpp_sm_encoded_length(const smpp_sm_t *sm);
 
 /**
  * \struct smpp_sm_resp_t
- * \brief submit_sm_resp & deliver_sm_resp.
+ * \brief submit_sm_resp, deliver_sm_resp, data_sm_resp, broadcast_sm_resp,
+ *        & query_broadcast_sm_resp.
  */
 typedef struct smpp_sm_resp_t {
 	const char *message_id;
@@ -392,6 +450,602 @@ smpp_sm_resp_encode(const smpp_sm_resp_t *resp, uint8_t *buffer,
  */
 size_t
 smpp_sm_resp_encoded_length(const smpp_sm_resp_t *resp);
+
+/**
+ * \struct smpp_alert_notification_t
+ * \brief alert_notification, MC-originated.
+ */
+typedef struct smpp_alert_notification_t {
+	uint8_t source_addr_ton;
+	uint8_t source_addr_npi;
+	const char *source_addr;
+	uint8_t esme_addr_ton;
+	uint8_t esme_addr_npi;
+	const char *esme_addr;
+	const uint8_t *tlvs;
+	uint16_t tlvs_length;
+} smpp_alert_notification_t;
+
+/**
+ * \brief Decodes alert_notification requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param alert Out param.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_alert_notification_decode(const uint8_t *body, size_t body_length,
+							   smpp_alert_notification_t *alert);
+
+/**
+ * \brief Encodes alert_notification requests.
+ * \param alert Alert to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_alert_notification_encode(const smpp_alert_notification_t *alert,
+							   uint8_t *buffer, size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode alert.
+ * \param alert The alert.
+ * \return Octets needed.
+ */
+size_t
+smpp_alert_notification_encoded_length(const smpp_alert_notification_t *alert);
+
+/**
+ * \struct smpp_query_sm_t
+ * \brief query_sm.
+ */
+typedef struct smpp_query_sm_t {
+	const char *message_id;
+	uint8_t source_addr_ton;
+	uint8_t source_addr_npi;
+	const char *source_addr;
+} smpp_query_sm_t;
+
+/**
+ * \brief Decodes query_sm requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param query Out param.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_query_sm_decode(const uint8_t *body, size_t body_length,
+					 smpp_query_sm_t *query);
+
+/**
+ * \brief Encodes query_sm requests.
+ * \param query Query to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_query_sm_encode(const smpp_query_sm_t *query, uint8_t *buffer,
+					 size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode query.
+ * \param query The query.
+ * \return Octets needed.
+ */
+size_t
+smpp_query_sm_encoded_length(const smpp_query_sm_t *query);
+
+/**
+ * \struct smpp_query_sm_resp_t
+ * \brief query_sm_resp.
+ */
+typedef struct smpp_query_sm_resp_t {
+	const char *message_id;
+	const char *final_date;
+	uint8_t message_state;
+	uint8_t error_code;
+} smpp_query_sm_resp_t;
+
+/**
+ * \brief Decodes query_sm_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_query_sm_resp_decode(const uint8_t *body, size_t body_length,
+						  smpp_query_sm_resp_t *resp);
+
+/**
+ * \brief Encodes query_sm_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_query_sm_resp_encode(const smpp_query_sm_resp_t *resp, uint8_t *buffer,
+						  size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
+size_t
+smpp_query_sm_resp_encoded_length(const smpp_query_sm_resp_t *resp);
+
+/**
+ * \struct smpp_cancel_sm_t
+ * \brief cancel_sm.
+ */
+typedef struct smpp_cancel_sm_t {
+	const char *service_type;
+	const char *message_id;
+	uint8_t source_addr_ton;
+	uint8_t source_addr_npi;
+	const char *source_addr;
+	uint8_t dest_addr_ton;
+	uint8_t dest_addr_npi;
+	const char *destination_addr;
+} smpp_cancel_sm_t;
+
+/**
+ * \brief Decodes cancel_sm requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param cancel Out param.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_cancel_sm_decode(const uint8_t *body, size_t body_length,
+					  smpp_cancel_sm_t *cancel);
+
+/**
+ * \brief Encodes cancel_sm requests.
+ * \param cancel Cancel to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_cancel_sm_encode(const smpp_cancel_sm_t *cancel, uint8_t *buffer,
+					  size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode cancel.
+ * \param cancel The cancel.
+ * \return Octets needed.
+ */
+size_t
+smpp_cancel_sm_encoded_length(const smpp_cancel_sm_t *cancel);
+
+/**
+ * \struct smpp_replace_sm_t
+ * \brief replace_sm.
+ */
+typedef struct smpp_replace_sm_t {
+	const char *message_id;
+	uint8_t source_addr_ton;
+	uint8_t source_addr_npi;
+	const char *source_addr;
+	const char *schedule_delivery_time;
+	const char *validity_period;
+	uint8_t registered_delivery;
+	uint8_t sm_default_msg_id;
+	const uint8_t *short_message;
+	uint8_t short_message_length;
+	const uint8_t *tlvs;
+	uint16_t tlvs_length;
+} smpp_replace_sm_t;
+
+/**
+ * \brief Decodes replace_sm requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param replace Out param.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_replace_sm_decode(const uint8_t *body, size_t body_length,
+					   smpp_replace_sm_t *replace);
+
+/**
+ * \brief Encodes replace_sm requests.
+ * \param replace Replace to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_replace_sm_encode(const smpp_replace_sm_t *replace, uint8_t *buffer,
+					   size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode replace.
+ * \param replace The replace.
+ * \return Octets needed.
+ */
+size_t
+smpp_replace_sm_encoded_length(const smpp_replace_sm_t *replace);
+
+/**
+ * \struct smpp_data_sm_t
+ * \brief data_sm.
+ */
+typedef struct smpp_data_sm_t {
+	const char *service_type;
+	uint8_t source_addr_ton;
+	uint8_t source_addr_npi;
+	const char *source_addr;
+	uint8_t dest_addr_ton;
+	uint8_t dest_addr_npi;
+	const char *destination_addr;
+	uint8_t esm_class;
+	uint8_t registered_delivery;
+	uint8_t data_coding;
+	const uint8_t *tlvs;
+	uint16_t tlvs_length;
+} smpp_data_sm_t;
+
+/**
+ * \brief Decodes data_sm requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param data Out param.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_data_sm_decode(const uint8_t *body, size_t body_length,
+					smpp_data_sm_t *data);
+
+/**
+ * \brief Encodes data_sm requests.
+ * \param data Data to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_data_sm_encode(const smpp_data_sm_t *data, uint8_t *buffer,
+					size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode data.
+ * \param data The data.
+ * \return Octets needed.
+ */
+size_t
+smpp_data_sm_encoded_length(const smpp_data_sm_t *data);
+
+/**
+ * \struct smpp_broadcast_sm_t
+ * \brief broadcast_sm.
+ */
+typedef struct smpp_broadcast_sm_t {
+	const char *service_type;
+	uint8_t source_addr_ton;
+	uint8_t source_addr_npi;
+	const char *source_addr;
+	const char *message_id;
+	uint8_t priority_flag;
+	const char *schedule_delivery_time;
+	const char *validity_period;
+	uint8_t replace_if_present_flag;
+	uint8_t data_coding;
+	uint8_t sm_default_msg_id;
+	const uint8_t *tlvs;
+	uint16_t tlvs_length;
+} smpp_broadcast_sm_t;
+
+/**
+ * \brief Decodes broadcast_sm requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param broadcast Out param.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_broadcast_sm_decode(const uint8_t *body, size_t body_length,
+						 smpp_broadcast_sm_t *broadcast);
+
+/**
+ * \brief Encodes broadcast_sm requests.
+ * \param broadcast Broadcast to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_broadcast_sm_encode(const smpp_broadcast_sm_t *broadcast, uint8_t *buffer,
+						 size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode broadcast.
+ * \param broadcast The broadcast.
+ * \return Octets needed.
+ */
+size_t
+smpp_broadcast_sm_encoded_length(const smpp_broadcast_sm_t *broadcast);
+
+/**
+ * \struct smpp_query_broadcast_sm_t
+ * \brief query_broadcast_sm.
+ */
+typedef struct smpp_query_broadcast_sm_t {
+	const char *message_id;
+	uint8_t source_addr_ton;
+	uint8_t source_addr_npi;
+	const char *source_addr;
+	const uint8_t *tlvs;
+	uint16_t tlvs_length;
+} smpp_query_broadcast_sm_t;
+
+/**
+ * \brief Decodes query_broadcast_sm requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param query Out param.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_query_broadcast_sm_decode(const uint8_t *body, size_t body_length,
+							   smpp_query_broadcast_sm_t *query);
+
+/**
+ * \brief Encodes query_broadcast_sm requests.
+ * \param query Query to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_query_broadcast_sm_encode(const smpp_query_broadcast_sm_t *query,
+							   uint8_t *buffer, size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode query.
+ * \param query The query.
+ * \return Octets needed.
+ */
+size_t
+smpp_query_broadcast_sm_encoded_length(const smpp_query_broadcast_sm_t *query);
+
+/**
+ * \struct smpp_cancel_broadcast_sm_t
+ * \brief cancel_broadcast_sm.
+ */
+typedef struct smpp_cancel_broadcast_sm_t {
+	const char *service_type;
+	const char *message_id;
+	uint8_t source_addr_ton;
+	uint8_t source_addr_npi;
+	const char *source_addr;
+	const uint8_t *tlvs;
+	uint16_t tlvs_length;
+} smpp_cancel_broadcast_sm_t;
+
+/**
+ * \brief Decodes cancel_broadcast_sm requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param cancel Out param.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_cancel_broadcast_sm_decode(const uint8_t *body, size_t body_length,
+								smpp_cancel_broadcast_sm_t *cancel);
+
+/**
+ * \brief Encodes cancel_broadcast_sm requests.
+ * \param cancel Cancel to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_cancel_broadcast_sm_encode(const smpp_cancel_broadcast_sm_t *cancel,
+								uint8_t *buffer, size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode cancel.
+ * \param cancel The cancel.
+ * \return Octets needed.
+ */
+size_t
+smpp_cancel_broadcast_sm_encoded_length(
+	const smpp_cancel_broadcast_sm_t *cancel);
+
+/**
+ * \enum smpp_list_status_t
+ * \brief Result of a dest_address/unsuccess_sme decode/encode step.
+ */
+typedef enum smpp_list_status_t {
+	SMPP_LIST_OK = 0,
+	SMPP_LIST_END,
+	SMPP_LIST_MALFORMED,
+	SMPP_LIST_ERR_BUFFER_TOO_SMALL,
+} smpp_list_status_t;
+
+/**
+ * \struct smpp_dest_address_t
+ * \brief One decoded dest_address entry from submit_multi.
+ */
+typedef struct smpp_dest_address_t {
+	uint8_t dest_flag;
+	uint8_t dest_addr_ton;
+	uint8_t dest_addr_npi;
+	const char *destination_addr;
+	const char *dl_name;
+} smpp_dest_address_t;
+
+/**
+ * \brief Decodes the next dest_address entry and advances the cursor.
+ * \param cursor Cursor into the dest_address block, advanced past the
+ *        decoded entry.
+ * \param end End of the dest_address block.
+ * \param dest Out param.
+ * \return SMPP_LIST_OK, SMPP_LIST_END, or SMPP_LIST_MALFORMED.
+ */
+smpp_list_status_t
+smpp_dest_address_next(const uint8_t **cursor, const uint8_t *end,
+					   smpp_dest_address_t *dest);
+
+/**
+ * \brief Encodes one dest_address entry and advances the offset.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \param offset Current write position; advanced past the written entry.
+ * \param dest Entry to encode.
+ * \return SMPP_LIST_OK on success, SMPP_LIST_ERR_BUFFER_TOO_SMALL otherwise.
+ */
+smpp_list_status_t
+smpp_dest_address_write(uint8_t *buffer, size_t buffer_length, size_t *offset,
+						const smpp_dest_address_t *dest);
+
+/**
+ * \struct smpp_unsuccess_sme_t
+ * \brief One decoded unsuccess_sme entry from submit_multi_resp.
+ */
+typedef struct smpp_unsuccess_sme_t {
+	uint8_t dest_addr_ton;
+	uint8_t dest_addr_npi;
+	const char *destination_addr;
+	uint32_t error_status_code;
+} smpp_unsuccess_sme_t;
+
+/**
+ * \brief Decodes the next unsuccess_sme entry and advances the cursor.
+ * \param cursor Cursor into the unsuccess_sme block, advanced past the
+ *        decoded entry.
+ * \param end End of the unsuccess_sme block.
+ * \param sme Out param.
+ * \return SMPP_LIST_OK, SMPP_LIST_END, or SMPP_LIST_MALFORMED.
+ */
+smpp_list_status_t
+smpp_unsuccess_sme_next(const uint8_t **cursor, const uint8_t *end,
+						smpp_unsuccess_sme_t *sme);
+
+/**
+ * \brief Encodes one unsuccess_sme entry and advances the offset.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \param offset Current write position; advanced past the written entry.
+ * \param sme Entry to encode.
+ * \return SMPP_LIST_OK on success, SMPP_LIST_ERR_BUFFER_TOO_SMALL otherwise.
+ */
+smpp_list_status_t
+smpp_unsuccess_sme_write(uint8_t *buffer, size_t buffer_length, size_t *offset,
+						 const smpp_unsuccess_sme_t *sme);
+
+/**
+ * \struct smpp_submit_multi_t
+ * \brief submit_multi. dest_addresses is a pre-validated span covering
+ *        exactly dest_count entries; iterate it with smpp_dest_address_next.
+ */
+typedef struct smpp_submit_multi_t {
+	const char *service_type;
+	uint8_t source_addr_ton;
+	uint8_t source_addr_npi;
+	const char *source_addr;
+	uint8_t dest_count;
+	const uint8_t *dest_addresses;
+	uint16_t dest_addresses_length;
+	uint8_t esm_class;
+	uint8_t protocol_id;
+	uint8_t priority_flag;
+	const char *schedule_delivery_time;
+	const char *validity_period;
+	uint8_t registered_delivery;
+	uint8_t replace_if_present_flag;
+	uint8_t data_coding;
+	uint8_t sm_default_msg_id;
+	const uint8_t *short_message;
+	uint8_t short_message_length;
+	const uint8_t *tlvs;
+	uint16_t tlvs_length;
+} smpp_submit_multi_t;
+
+/**
+ * \brief Decodes submit_multi requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param multi Out param.
+ * \return SMPP_OK on success, SMPP_ERR_INVALID if dest_count entries can't
+ *         all be validated (truncated or malformed dest_address block).
+ */
+smpp_status_t
+smpp_submit_multi_decode(const uint8_t *body, size_t body_length,
+						 smpp_submit_multi_t *multi);
+
+/**
+ * \brief Encodes submit_multi requests.
+ * \param multi Multi to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_submit_multi_encode(const smpp_submit_multi_t *multi, uint8_t *buffer,
+						 size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode multi.
+ * \param multi The multi.
+ * \return Octets needed.
+ */
+size_t
+smpp_submit_multi_encoded_length(const smpp_submit_multi_t *multi);
+
+/**
+ * \struct smpp_submit_multi_resp_t
+ * \brief submit_multi_resp. unsuccess_smes is a pre-validated span covering
+ *        exactly unsuccess_count entries; iterate it with
+ *        smpp_unsuccess_sme_next.
+ */
+typedef struct smpp_submit_multi_resp_t {
+	const char *message_id;
+	uint8_t unsuccess_count;
+	const uint8_t *unsuccess_smes;
+	uint16_t unsuccess_smes_length;
+	const uint8_t *tlvs;
+	uint16_t tlvs_length;
+} smpp_submit_multi_resp_t;
+
+/**
+ * \brief Decodes submit_multi_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success, SMPP_ERR_INVALID if unsuccess_count entries
+ *         can't all be validated (truncated or malformed unsuccess_sme
+ *         block).
+ */
+smpp_status_t
+smpp_submit_multi_resp_decode(const uint8_t *body, size_t body_length,
+							  smpp_submit_multi_resp_t *resp);
+
+/**
+ * \brief Encodes submit_multi_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+smpp_status_t
+smpp_submit_multi_resp_encode(const smpp_submit_multi_resp_t *resp,
+							  uint8_t *buffer, size_t buffer_length);
+
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
+size_t
+smpp_submit_multi_resp_encoded_length(const smpp_submit_multi_resp_t *resp);
 
 /**
  * \brief Returns a string describing status.

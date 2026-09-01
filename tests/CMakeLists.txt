@@ -1,11 +1,17 @@
-add_executable(pdu_test pdu.c)
+set(libsmpp5_test_modules
+    pdu
+    smpp
+    smpp_alert
+    smpp_ancillary
+    smpp_bind
+    smpp_broadcast
+    smpp_data
+    smpp_multi
+    smpp_sm
+    smpp_tlv)
 
-target_link_libraries(pdu_test PRIVATE libsmpp5::smpp5)
-
-add_test(NAME pdu COMMAND pdu_test)
-
-add_executable(smpp_test smpp.c)
-
-target_link_libraries(smpp_test PRIVATE libsmpp5::smpp5)
-
-add_test(NAME smpp COMMAND smpp_test)
+foreach(module ${libsmpp5_test_modules})
+    add_executable(${module}_test ${module}.c)
+    target_link_libraries(${module}_test PRIVATE libsmpp5::smpp5)
+    add_test(NAME ${module} COMMAND ${module}_test)
+endforeach()
