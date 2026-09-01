@@ -1,6 +1,10 @@
 add_library(smpp5
     pdu.c
     smpp.c
+    smpp_bind.c
+    smpp_internal.c
+    smpp_internal.h
+    smpp_sm.c
     smpp_tlv.c
     ${PROJECT_SOURCE_DIR}/include/libsmpp5/pdu.h
     ${PROJECT_SOURCE_DIR}/include/libsmpp5/smpp.h

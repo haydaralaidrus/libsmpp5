@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Public headers moved from `src/` to `include/libsmpp5/`.
+- `smpp.c` split by operation family.
 
 ## [0.0.1] - 2026-08-31
 
