@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 2026-09-01
+
 ### Added
 - Error to string functions: `pdu_strerror`, `smpp_strerror`, `smpp_tlv_strerror`, & `smpp_esme_strerror`
 - Doxygen API docs.
@@ -26,5 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `pdu.h`/`pdu.c`: Encoding/decoding PDUs.
 - `smpp.h`/`smpp.c`: SMPP functionality.
 
-[unreleased]: https://github.com/haydaralaidrus/libsmpp5/compare/v0.0.1...HEAD
+[unreleased]: https://github.com/haydaralaidrus/libsmpp5/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/haydaralaidrus/libsmpp5/compare/v0.0.1...v1.0.0
 [0.0.1]: https://github.com/haydaralaidrus/libsmpp5/releases/tag/v0.0.1
