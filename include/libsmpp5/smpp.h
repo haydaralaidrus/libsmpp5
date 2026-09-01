@@ -22,6 +22,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/**
+ * \file smpp.h
+ * \brief SMPP command/status constants and operation-body codecs.
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -6,6 +6,7 @@ Library for SMPP 5.0 Protocol, as specified by the SMPP Developers Forum.
 
 - CMake >=3.15
 - GCC or Clang (C11-capable)
+- Doxygen (Optional, for generating docs.)
 
 ## Compiling
 
@@ -19,6 +20,16 @@ The test suite is using CTest:
 ```sh
 ctest --test-dir build
 ```
+
+## Documentation
+
+If [Doxygen](https://www.doxygen.org/) is installed:
+
+```sh
+cmake --build build --target docs
+```
+
+Output goes to `build/docs/html/index.html`.
 
 ## Installation
 

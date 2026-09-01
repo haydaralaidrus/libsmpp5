@@ -22,6 +22,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/**
+ * \file smpp_tlv.h
+ * \brief SMPP tag-length-value (TLV) codec.
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif

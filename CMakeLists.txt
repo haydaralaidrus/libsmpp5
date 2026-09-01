@@ -18,7 +18,7 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-# --- Install / packaging ---
+# --- Install ---
 
 install(TARGETS smpp5
     EXPORT libsmpp5-targets
@@ -58,3 +58,20 @@ configure_file(
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libsmpp5.pc
     DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+
+# --- Docs ---
+
+find_package(Doxygen QUIET)
+
+if(DOXYGEN_FOUND)
+    configure_file(
+        ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
+        ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+        @ONLY)
+
+    add_custom_target(docs
+        COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM)
+endif()

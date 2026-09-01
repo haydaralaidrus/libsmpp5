@@ -22,6 +22,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
+/**
+ * \file pdu.h
+ * \brief SMPP PDU envelope.
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
