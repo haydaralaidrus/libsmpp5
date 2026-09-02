@@ -66,20 +66,17 @@ test_data_sm_round_trip(void)
 }
 
 static int
-test_data_sm_resp_reuses_sm_resp(void)
+test_data_sm_resp_round_trip(void)
 {
-	/* data_sm_resp is identical in shape to smpp_sm_resp_t: no dedicated
-	 * struct/functions exist, this just confirms the shared codec works
-	 * for it too. */
 	uint8_t wire[64];
-	smpp_sm_resp_t in = { 0 };
+	smpp_data_sm_resp_t in = { 0 };
 	in.message_id = "MC-00099999";
 
-	size_t needed = smpp_sm_resp_encoded_length(&in);
-	CHECK(smpp_sm_resp_encode(&in, wire, sizeof(wire)) == SMPP_OK);
+	size_t needed = smpp_data_sm_resp_encoded_length(&in);
+	CHECK(smpp_data_sm_resp_encode(&in, wire, sizeof(wire)) == SMPP_OK);
 
-	smpp_sm_resp_t out;
-	CHECK(smpp_sm_resp_decode(wire, needed, &out) == SMPP_OK);
+	smpp_data_sm_resp_t out;
+	CHECK(smpp_data_sm_resp_decode(wire, needed, &out) == SMPP_OK);
 	CHECK(strcmp(out.message_id, "MC-00099999") == 0);
 	return 0;
 }
@@ -90,7 +87,7 @@ main(void)
 	int failures = 0;
 
 	failures += test_data_sm_round_trip();
-	failures += test_data_sm_resp_reuses_sm_resp();
+	failures += test_data_sm_resp_round_trip();
 
 	if (failures > 0) {
 		fprintf(stderr, "%d check(s) failed\n", failures);

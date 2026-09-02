@@ -63,17 +63,17 @@ test_broadcast_sm_round_trip(void)
 }
 
 static int
-test_broadcast_sm_resp_reuses_sm_resp(void)
+test_broadcast_sm_resp_round_trip(void)
 {
 	uint8_t wire[64];
-	smpp_sm_resp_t in = { 0 };
+	smpp_broadcast_sm_resp_t in = { 0 };
 	in.message_id = "BCAST-00001";
 
-	size_t needed = smpp_sm_resp_encoded_length(&in);
-	CHECK(smpp_sm_resp_encode(&in, wire, sizeof(wire)) == SMPP_OK);
+	size_t needed = smpp_broadcast_sm_resp_encoded_length(&in);
+	CHECK(smpp_broadcast_sm_resp_encode(&in, wire, sizeof(wire)) == SMPP_OK);
 
-	smpp_sm_resp_t out;
-	CHECK(smpp_sm_resp_decode(wire, needed, &out) == SMPP_OK);
+	smpp_broadcast_sm_resp_t out;
+	CHECK(smpp_broadcast_sm_resp_decode(wire, needed, &out) == SMPP_OK);
 	CHECK(strcmp(out.message_id, "BCAST-00001") == 0);
 	return 0;
 }
@@ -95,6 +95,23 @@ test_query_broadcast_sm_round_trip(void)
 	CHECK(smpp_query_broadcast_sm_decode(wire, needed, &out) == SMPP_OK);
 	CHECK(strcmp(out.message_id, "BCAST-00001") == 0);
 	CHECK(out.tlvs_length == 0);
+	return 0;
+}
+
+static int
+test_query_broadcast_sm_resp_round_trip(void)
+{
+	uint8_t wire[64];
+	smpp_query_broadcast_sm_resp_t in = { 0 };
+	in.message_id = "BCAST-00001";
+
+	size_t needed = smpp_query_broadcast_sm_resp_encoded_length(&in);
+	CHECK(smpp_query_broadcast_sm_resp_encode(&in, wire, sizeof(wire)) ==
+		  SMPP_OK);
+
+	smpp_query_broadcast_sm_resp_t out;
+	CHECK(smpp_query_broadcast_sm_resp_decode(wire, needed, &out) == SMPP_OK);
+	CHECK(strcmp(out.message_id, "BCAST-00001") == 0);
 	return 0;
 }
 
@@ -124,8 +141,9 @@ main(void)
 	int failures = 0;
 
 	failures += test_broadcast_sm_round_trip();
-	failures += test_broadcast_sm_resp_reuses_sm_resp();
+	failures += test_broadcast_sm_resp_round_trip();
 	failures += test_query_broadcast_sm_round_trip();
+	failures += test_query_broadcast_sm_resp_round_trip();
 	failures += test_cancel_broadcast_sm_round_trip();
 
 	if (failures > 0) {

@@ -103,6 +103,71 @@ test_outbind_round_trip(void)
 }
 
 static int
+test_bind_per_op_aliases(void)
+{
+	uint8_t wire[64];
+
+	smpp_bind_transmitter_t tx = { 0 };
+	tx.system_id = "tx";
+	tx.password = "secret12";
+	size_t tx_needed = smpp_bind_transmitter_encoded_length(&tx);
+	CHECK(smpp_bind_transmitter_encode(&tx, wire, sizeof(wire)) == SMPP_OK);
+	smpp_bind_transmitter_t tx_out;
+	CHECK(smpp_bind_transmitter_decode(wire, tx_needed, &tx_out) == SMPP_OK);
+	CHECK(strcmp(tx_out.system_id, "tx") == 0);
+
+	smpp_bind_receiver_t rx = { 0 };
+	rx.system_id = "rx";
+	rx.password = "secret12";
+	size_t rx_needed = smpp_bind_receiver_encoded_length(&rx);
+	CHECK(smpp_bind_receiver_encode(&rx, wire, sizeof(wire)) == SMPP_OK);
+	smpp_bind_receiver_t rx_out;
+	CHECK(smpp_bind_receiver_decode(wire, rx_needed, &rx_out) == SMPP_OK);
+	CHECK(strcmp(rx_out.system_id, "rx") == 0);
+
+	smpp_bind_transceiver_t trx = { 0 };
+	trx.system_id = "trx";
+	trx.password = "secret12";
+	size_t trx_needed = smpp_bind_transceiver_encoded_length(&trx);
+	CHECK(smpp_bind_transceiver_encode(&trx, wire, sizeof(wire)) == SMPP_OK);
+	smpp_bind_transceiver_t trx_out;
+	CHECK(smpp_bind_transceiver_decode(wire, trx_needed, &trx_out) == SMPP_OK);
+	CHECK(strcmp(trx_out.system_id, "trx") == 0);
+
+	smpp_bind_transmitter_resp_t tx_resp = { 0 };
+	tx_resp.system_id = "mc";
+	size_t tx_resp_needed = smpp_bind_transmitter_resp_encoded_length(&tx_resp);
+	CHECK(smpp_bind_transmitter_resp_encode(&tx_resp, wire, sizeof(wire)) ==
+		  SMPP_OK);
+	smpp_bind_transmitter_resp_t tx_resp_out;
+	CHECK(smpp_bind_transmitter_resp_decode(wire, tx_resp_needed,
+											&tx_resp_out) == SMPP_OK);
+	CHECK(strcmp(tx_resp_out.system_id, "mc") == 0);
+
+	smpp_bind_receiver_resp_t rx_resp = { 0 };
+	rx_resp.system_id = "mc";
+	size_t rx_resp_needed = smpp_bind_receiver_resp_encoded_length(&rx_resp);
+	CHECK(smpp_bind_receiver_resp_encode(&rx_resp, wire, sizeof(wire)) ==
+		  SMPP_OK);
+	smpp_bind_receiver_resp_t rx_resp_out;
+	CHECK(smpp_bind_receiver_resp_decode(wire, rx_resp_needed, &rx_resp_out) ==
+		  SMPP_OK);
+	CHECK(strcmp(rx_resp_out.system_id, "mc") == 0);
+
+	smpp_bind_transceiver_resp_t trx_resp = { 0 };
+	trx_resp.system_id = "mc";
+	size_t trx_resp_needed =
+		smpp_bind_transceiver_resp_encoded_length(&trx_resp);
+	CHECK(smpp_bind_transceiver_resp_encode(&trx_resp, wire, sizeof(wire)) ==
+		  SMPP_OK);
+	smpp_bind_transceiver_resp_t trx_resp_out;
+	CHECK(smpp_bind_transceiver_resp_decode(wire, trx_resp_needed,
+											&trx_resp_out) == SMPP_OK);
+	CHECK(strcmp(trx_resp_out.system_id, "mc") == 0);
+	return 0;
+}
+
+static int
 test_bind_encode_validation_errors(void)
 {
 	uint8_t wire[128];
@@ -144,6 +209,7 @@ main(void)
 	failures += test_bind_round_trip();
 	failures += test_bind_resp_round_trip_with_tlv();
 	failures += test_outbind_round_trip();
+	failures += test_bind_per_op_aliases();
 	failures += test_bind_encode_validation_errors();
 	failures += test_bind_decode_validation_errors();
 

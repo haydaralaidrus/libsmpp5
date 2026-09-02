@@ -16,14 +16,6 @@
  ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/* Spans spec section 4.4 "Message Broadcast Operations" (broadcast_sm) and
- * section 4.6 "Ancillary Broadcast Operations" (query_broadcast_sm,
- * cancel_broadcast_sm), grouped here by feature area rather than by the
- * spec's own section split, since a consumer implementing broadcast support
- * thinks in terms of the feature, not the spec's table of contents.
- * broadcast_sm_resp/query_broadcast_sm_resp reuse smpp_sm_resp_t (identical
- * shape); cancel_broadcast_sm_resp has no body (header only). */
-
 #include "libsmpp5/smpp.h"
 #include "smpp_internal.h"
 

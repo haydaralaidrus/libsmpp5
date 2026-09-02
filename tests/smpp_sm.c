@@ -116,6 +116,52 @@ test_sm_resp_round_trip(void)
 }
 
 static int
+test_sm_per_op_aliases(void)
+{
+	uint8_t wire[128];
+
+	smpp_submit_sm_t submit = { 0 };
+	submit.destination_addr = "15559876543";
+	size_t submit_needed = smpp_submit_sm_encoded_length(&submit);
+	CHECK(smpp_submit_sm_encode(&submit, wire, sizeof(wire)) == SMPP_OK);
+	smpp_submit_sm_t submit_out;
+	CHECK(smpp_submit_sm_decode(wire, submit_needed, &submit_out) == SMPP_OK);
+	CHECK(strcmp(submit_out.destination_addr, "15559876543") == 0);
+
+	smpp_deliver_sm_t deliver = { 0 };
+	deliver.destination_addr = "15551234567";
+	size_t deliver_needed = smpp_deliver_sm_encoded_length(&deliver);
+	CHECK(smpp_deliver_sm_encode(&deliver, wire, sizeof(wire)) == SMPP_OK);
+	smpp_deliver_sm_t deliver_out;
+	CHECK(smpp_deliver_sm_decode(wire, deliver_needed, &deliver_out) ==
+		  SMPP_OK);
+	CHECK(strcmp(deliver_out.destination_addr, "15551234567") == 0);
+
+	smpp_submit_sm_resp_t submit_resp = { 0 };
+	submit_resp.message_id = "MC-SUBMIT-1";
+	size_t submit_resp_needed =
+		smpp_submit_sm_resp_encoded_length(&submit_resp);
+	CHECK(smpp_submit_sm_resp_encode(&submit_resp, wire, sizeof(wire)) ==
+		  SMPP_OK);
+	smpp_submit_sm_resp_t submit_resp_out;
+	CHECK(smpp_submit_sm_resp_decode(wire, submit_resp_needed,
+									 &submit_resp_out) == SMPP_OK);
+	CHECK(strcmp(submit_resp_out.message_id, "MC-SUBMIT-1") == 0);
+
+	smpp_deliver_sm_resp_t deliver_resp = { 0 };
+	deliver_resp.message_id = "MC-DELIVER-1";
+	size_t deliver_resp_needed =
+		smpp_deliver_sm_resp_encoded_length(&deliver_resp);
+	CHECK(smpp_deliver_sm_resp_encode(&deliver_resp, wire, sizeof(wire)) ==
+		  SMPP_OK);
+	smpp_deliver_sm_resp_t deliver_resp_out;
+	CHECK(smpp_deliver_sm_resp_decode(wire, deliver_resp_needed,
+									  &deliver_resp_out) == SMPP_OK);
+	CHECK(strcmp(deliver_resp_out.message_id, "MC-DELIVER-1") == 0);
+	return 0;
+}
+
+static int
 test_sm_encode_validation_errors(void)
 {
 	uint8_t wire[128];
@@ -170,6 +216,7 @@ main(void)
 	failures += test_submit_sm_round_trip();
 	failures += test_submit_sm_with_absolute_time_and_tlv();
 	failures += test_sm_resp_round_trip();
+	failures += test_sm_per_op_aliases();
 	failures += test_sm_encode_validation_errors();
 	failures += test_full_pipeline_through_pdu_layer();
 

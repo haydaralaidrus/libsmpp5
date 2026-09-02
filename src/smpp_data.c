@@ -16,9 +16,6 @@
  ** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-/* data_sm_resp reuses smpp_sm_resp_t (identical shape): nothing to
- * implement here for the response side. */
-
 #include "libsmpp5/smpp.h"
 #include "smpp_internal.h"
 

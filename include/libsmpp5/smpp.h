@@ -277,6 +277,141 @@ size_t
 smpp_bind_encoded_length(const smpp_bind_t *bind);
 
 /**
+ * \typedef smpp_bind_transmitter_t
+ * \brief bind_transmitter; identical in shape to smpp_bind_t.
+ */
+typedef smpp_bind_t smpp_bind_transmitter_t;
+
+/**
+ * \brief Decodes bind_transmitter requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param bind Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_transmitter_decode(const uint8_t *body, size_t body_length,
+							 smpp_bind_transmitter_t *bind)
+{
+	return smpp_bind_decode(body, body_length, bind);
+}
+
+/**
+ * \brief Encodes bind_transmitter requests.
+ * \param bind Bind to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_transmitter_encode(const smpp_bind_transmitter_t *bind,
+							 uint8_t *buffer, size_t buffer_length)
+{
+	return smpp_bind_encode(bind, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode bind.
+ * \param bind The bind.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_bind_transmitter_encoded_length(const smpp_bind_transmitter_t *bind)
+{
+	return smpp_bind_encoded_length(bind);
+}
+
+/**
+ * \typedef smpp_bind_receiver_t
+ * \brief bind_receiver; identical in shape to smpp_bind_t.
+ */
+typedef smpp_bind_t smpp_bind_receiver_t;
+
+/**
+ * \brief Decodes bind_receiver requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param bind Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_receiver_decode(const uint8_t *body, size_t body_length,
+						  smpp_bind_receiver_t *bind)
+{
+	return smpp_bind_decode(body, body_length, bind);
+}
+
+/**
+ * \brief Encodes bind_receiver requests.
+ * \param bind Bind to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_receiver_encode(const smpp_bind_receiver_t *bind, uint8_t *buffer,
+						  size_t buffer_length)
+{
+	return smpp_bind_encode(bind, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode bind.
+ * \param bind The bind.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_bind_receiver_encoded_length(const smpp_bind_receiver_t *bind)
+{
+	return smpp_bind_encoded_length(bind);
+}
+
+/**
+ * \typedef smpp_bind_transceiver_t
+ * \brief bind_transceiver; identical in shape to smpp_bind_t.
+ */
+typedef smpp_bind_t smpp_bind_transceiver_t;
+
+/**
+ * \brief Decodes bind_transceiver requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param bind Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_transceiver_decode(const uint8_t *body, size_t body_length,
+							 smpp_bind_transceiver_t *bind)
+{
+	return smpp_bind_decode(body, body_length, bind);
+}
+
+/**
+ * \brief Encodes bind_transceiver requests.
+ * \param bind Bind to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_transceiver_encode(const smpp_bind_transceiver_t *bind,
+							 uint8_t *buffer, size_t buffer_length)
+{
+	return smpp_bind_encode(bind, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode bind.
+ * \param bind The bind.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_bind_transceiver_encoded_length(const smpp_bind_transceiver_t *bind)
+{
+	return smpp_bind_encoded_length(bind);
+}
+
+/**
  * \struct smpp_bind_resp_t
  * \brief bind_transmitter_resp, bind_receiver_resp, & bind_transceiver_resp.
  */
@@ -315,6 +450,143 @@ smpp_bind_resp_encode(const smpp_bind_resp_t *resp, uint8_t *buffer,
  */
 size_t
 smpp_bind_resp_encoded_length(const smpp_bind_resp_t *resp);
+
+/**
+ * \typedef smpp_bind_transmitter_resp_t
+ * \brief bind_transmitter_resp; identical in shape to smpp_bind_resp_t.
+ */
+typedef smpp_bind_resp_t smpp_bind_transmitter_resp_t;
+
+/**
+ * \brief Decodes bind_transmitter_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_transmitter_resp_decode(const uint8_t *body, size_t body_length,
+								  smpp_bind_transmitter_resp_t *resp)
+{
+	return smpp_bind_resp_decode(body, body_length, resp);
+}
+
+/**
+ * \brief Encodes bind_transmitter_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_transmitter_resp_encode(const smpp_bind_transmitter_resp_t *resp,
+								  uint8_t *buffer, size_t buffer_length)
+{
+	return smpp_bind_resp_encode(resp, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_bind_transmitter_resp_encoded_length(
+	const smpp_bind_transmitter_resp_t *resp)
+{
+	return smpp_bind_resp_encoded_length(resp);
+}
+
+/**
+ * \typedef smpp_bind_receiver_resp_t
+ * \brief bind_receiver_resp; identical in shape to smpp_bind_resp_t.
+ */
+typedef smpp_bind_resp_t smpp_bind_receiver_resp_t;
+
+/**
+ * \brief Decodes bind_receiver_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_receiver_resp_decode(const uint8_t *body, size_t body_length,
+							   smpp_bind_receiver_resp_t *resp)
+{
+	return smpp_bind_resp_decode(body, body_length, resp);
+}
+
+/**
+ * \brief Encodes bind_receiver_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_receiver_resp_encode(const smpp_bind_receiver_resp_t *resp,
+							   uint8_t *buffer, size_t buffer_length)
+{
+	return smpp_bind_resp_encode(resp, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_bind_receiver_resp_encoded_length(const smpp_bind_receiver_resp_t *resp)
+{
+	return smpp_bind_resp_encoded_length(resp);
+}
+
+/**
+ * \typedef smpp_bind_transceiver_resp_t
+ * \brief bind_transceiver_resp; identical in shape to smpp_bind_resp_t.
+ */
+typedef smpp_bind_resp_t smpp_bind_transceiver_resp_t;
+
+/**
+ * \brief Decodes bind_transceiver_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_transceiver_resp_decode(const uint8_t *body, size_t body_length,
+								  smpp_bind_transceiver_resp_t *resp)
+{
+	return smpp_bind_resp_decode(body, body_length, resp);
+}
+
+/**
+ * \brief Encodes bind_transceiver_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_bind_transceiver_resp_encode(const smpp_bind_transceiver_resp_t *resp,
+								  uint8_t *buffer, size_t buffer_length)
+{
+	return smpp_bind_resp_encode(resp, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_bind_transceiver_resp_encoded_length(
+	const smpp_bind_transceiver_resp_t *resp)
+{
+	return smpp_bind_resp_encoded_length(resp);
+}
 
 /**
  * \struct smpp_outbind_t
@@ -411,9 +683,98 @@ size_t
 smpp_sm_encoded_length(const smpp_sm_t *sm);
 
 /**
+ * \typedef smpp_submit_sm_t
+ * \brief submit_sm; identical in shape to smpp_sm_t.
+ */
+typedef smpp_sm_t smpp_submit_sm_t;
+
+/**
+ * \brief Decodes submit_sm requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param sm Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_submit_sm_decode(const uint8_t *body, size_t body_length,
+					  smpp_submit_sm_t *sm)
+{
+	return smpp_sm_decode(body, body_length, sm);
+}
+
+/**
+ * \brief Encodes submit_sm requests.
+ * \param sm Message to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_submit_sm_encode(const smpp_submit_sm_t *sm, uint8_t *buffer,
+					  size_t buffer_length)
+{
+	return smpp_sm_encode(sm, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode sm.
+ * \param sm The message.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_submit_sm_encoded_length(const smpp_submit_sm_t *sm)
+{
+	return smpp_sm_encoded_length(sm);
+}
+
+/**
+ * \typedef smpp_deliver_sm_t
+ * \brief deliver_sm; identical in shape to smpp_sm_t.
+ */
+typedef smpp_sm_t smpp_deliver_sm_t;
+
+/**
+ * \brief Decodes deliver_sm requests.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param sm Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_deliver_sm_decode(const uint8_t *body, size_t body_length,
+					   smpp_deliver_sm_t *sm)
+{
+	return smpp_sm_decode(body, body_length, sm);
+}
+
+/**
+ * \brief Encodes deliver_sm requests.
+ * \param sm Message to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_deliver_sm_encode(const smpp_deliver_sm_t *sm, uint8_t *buffer,
+					   size_t buffer_length)
+{
+	return smpp_sm_encode(sm, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode sm.
+ * \param sm The message.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_deliver_sm_encoded_length(const smpp_deliver_sm_t *sm)
+{
+	return smpp_sm_encoded_length(sm);
+}
+
+/**
  * \struct smpp_sm_resp_t
- * \brief submit_sm_resp, deliver_sm_resp, data_sm_resp, broadcast_sm_resp,
- *        & query_broadcast_sm_resp.
+ * \brief submit_sm_resp & deliver_sm_resp.
  */
 typedef struct smpp_sm_resp_t {
 	const char *message_id;
@@ -450,6 +811,96 @@ smpp_sm_resp_encode(const smpp_sm_resp_t *resp, uint8_t *buffer,
  */
 size_t
 smpp_sm_resp_encoded_length(const smpp_sm_resp_t *resp);
+
+/**
+ * \typedef smpp_submit_sm_resp_t
+ * \brief submit_sm_resp; identical in shape to smpp_sm_resp_t.
+ */
+typedef smpp_sm_resp_t smpp_submit_sm_resp_t;
+
+/**
+ * \brief Decodes submit_sm_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_submit_sm_resp_decode(const uint8_t *body, size_t body_length,
+						   smpp_submit_sm_resp_t *resp)
+{
+	return smpp_sm_resp_decode(body, body_length, resp);
+}
+
+/**
+ * \brief Encodes submit_sm_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_submit_sm_resp_encode(const smpp_submit_sm_resp_t *resp, uint8_t *buffer,
+						   size_t buffer_length)
+{
+	return smpp_sm_resp_encode(resp, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_submit_sm_resp_encoded_length(const smpp_submit_sm_resp_t *resp)
+{
+	return smpp_sm_resp_encoded_length(resp);
+}
+
+/**
+ * \typedef smpp_deliver_sm_resp_t
+ * \brief deliver_sm_resp; identical in shape to smpp_sm_resp_t.
+ */
+typedef smpp_sm_resp_t smpp_deliver_sm_resp_t;
+
+/**
+ * \brief Decodes deliver_sm_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_deliver_sm_resp_decode(const uint8_t *body, size_t body_length,
+							smpp_deliver_sm_resp_t *resp)
+{
+	return smpp_sm_resp_decode(body, body_length, resp);
+}
+
+/**
+ * \brief Encodes deliver_sm_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_deliver_sm_resp_encode(const smpp_deliver_sm_resp_t *resp, uint8_t *buffer,
+							size_t buffer_length)
+{
+	return smpp_sm_resp_encode(resp, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_deliver_sm_resp_encoded_length(const smpp_deliver_sm_resp_t *resp)
+{
+	return smpp_sm_resp_encoded_length(resp);
+}
 
 /**
  * \struct smpp_alert_notification_t
@@ -722,6 +1173,51 @@ size_t
 smpp_data_sm_encoded_length(const smpp_data_sm_t *data);
 
 /**
+ * \typedef smpp_data_sm_resp_t
+ * \brief data_sm_resp; identical in shape to smpp_sm_resp_t.
+ */
+typedef smpp_sm_resp_t smpp_data_sm_resp_t;
+
+/**
+ * \brief Decodes data_sm_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_data_sm_resp_decode(const uint8_t *body, size_t body_length,
+						 smpp_data_sm_resp_t *resp)
+{
+	return smpp_sm_resp_decode(body, body_length, resp);
+}
+
+/**
+ * \brief Encodes data_sm_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_data_sm_resp_encode(const smpp_data_sm_resp_t *resp, uint8_t *buffer,
+						 size_t buffer_length)
+{
+	return smpp_sm_resp_encode(resp, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_data_sm_resp_encoded_length(const smpp_data_sm_resp_t *resp)
+{
+	return smpp_sm_resp_encoded_length(resp);
+}
+
+/**
  * \struct smpp_broadcast_sm_t
  * \brief broadcast_sm.
  */
@@ -772,6 +1268,51 @@ size_t
 smpp_broadcast_sm_encoded_length(const smpp_broadcast_sm_t *broadcast);
 
 /**
+ * \typedef smpp_broadcast_sm_resp_t
+ * \brief broadcast_sm_resp; identical in shape to smpp_sm_resp_t.
+ */
+typedef smpp_sm_resp_t smpp_broadcast_sm_resp_t;
+
+/**
+ * \brief Decodes broadcast_sm_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_broadcast_sm_resp_decode(const uint8_t *body, size_t body_length,
+							  smpp_broadcast_sm_resp_t *resp)
+{
+	return smpp_sm_resp_decode(body, body_length, resp);
+}
+
+/**
+ * \brief Encodes broadcast_sm_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_broadcast_sm_resp_encode(const smpp_broadcast_sm_resp_t *resp,
+							  uint8_t *buffer, size_t buffer_length)
+{
+	return smpp_sm_resp_encode(resp, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_broadcast_sm_resp_encoded_length(const smpp_broadcast_sm_resp_t *resp)
+{
+	return smpp_sm_resp_encoded_length(resp);
+}
+
+/**
  * \struct smpp_query_broadcast_sm_t
  * \brief query_broadcast_sm.
  */
@@ -813,6 +1354,52 @@ smpp_query_broadcast_sm_encode(const smpp_query_broadcast_sm_t *query,
  */
 size_t
 smpp_query_broadcast_sm_encoded_length(const smpp_query_broadcast_sm_t *query);
+
+/**
+ * \typedef smpp_query_broadcast_sm_resp_t
+ * \brief query_broadcast_sm_resp; identical in shape to smpp_sm_resp_t.
+ */
+typedef smpp_sm_resp_t smpp_query_broadcast_sm_resp_t;
+
+/**
+ * \brief Decodes query_broadcast_sm_resp responses.
+ * \param body Body octets.
+ * \param body_length Octets available in body.
+ * \param resp Out param.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_query_broadcast_sm_resp_decode(const uint8_t *body, size_t body_length,
+									smpp_query_broadcast_sm_resp_t *resp)
+{
+	return smpp_sm_resp_decode(body, body_length, resp);
+}
+
+/**
+ * \brief Encodes query_broadcast_sm_resp responses.
+ * \param resp Response to encode.
+ * \param buffer Destination.
+ * \param buffer_length Destination capacity.
+ * \return SMPP_OK on success.
+ */
+static inline smpp_status_t
+smpp_query_broadcast_sm_resp_encode(const smpp_query_broadcast_sm_resp_t *resp,
+									uint8_t *buffer, size_t buffer_length)
+{
+	return smpp_sm_resp_encode(resp, buffer, buffer_length);
+}
+
+/**
+ * \brief Octets needed to encode resp.
+ * \param resp The response.
+ * \return Octets needed.
+ */
+static inline size_t
+smpp_query_broadcast_sm_resp_encoded_length(
+	const smpp_query_broadcast_sm_resp_t *resp)
+{
+	return smpp_sm_resp_encoded_length(resp);
+}
 
 /**
  * \struct smpp_cancel_broadcast_sm_t
