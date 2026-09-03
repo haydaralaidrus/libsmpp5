@@ -7,9 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-09-03
+
 ### Added
 - Every operation backed by a shared struct now gets its own typedef & function
   names. All static inline & no new codec logic.
+
+### Fixed
+- Fix library version mismatch in the root cmake `./CMakeList.txt`.
 
 ## [1.0.0] - 2026-09-01
 
@@ -32,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `pdu.h`/`pdu.c`: Encoding/decoding PDUs.
 - `smpp.h`/`smpp.c`: SMPP functionality.
 
-[unreleased]: https://github.com/haydaralaidrus/libsmpp5/compare/v1.0.0...HEAD
+[unreleased]: https://github.com/haydaralaidrus/libsmpp5/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/haydaralaidrus/libsmpp5/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/haydaralaidrus/libsmpp5/compare/v0.0.1...v1.0.0
 [0.0.1]: https://github.com/haydaralaidrus/libsmpp5/releases/tag/v0.0.1

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 project(libsmpp5
-    VERSION 1.0.0
+    VERSION 1.1.0
     DESCRIPTION "C library for SMPP 5.0"
     LANGUAGES C)
 
